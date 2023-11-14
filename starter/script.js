@@ -17,12 +17,12 @@ if (navigator.geolocation)
     function (position) {
       const { latitude } = position.coords;
       const { longitude } = position.coords;
-      const coords = [latitude, longitude]
+      const coords = [latitude, longitude];
       // latitude comes first
       console.log(
         `https://www.google.com/maps/@${latitude},${longitude},6z?entry=ttu`
       );
-      //  L.map('map') this refers to the id 
+      //  L.map('map') this refers to the id
       const map = L.map('map').setView(coords, 13);
 
       L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
@@ -30,10 +30,17 @@ if (navigator.geolocation)
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      L.marker(coords)
-        .addTo(map)
-        .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-        .openPopup();
+      map.on('click', function (map_event) {
+        console.log(map_event);
+        const { lat } = map_event.latlng;
+        const { lng } = map_event.latlng;
+        const coords = [lat, lng]
+        console.log(lat,lng);
+        L.marker(coords)
+          .addTo(map)
+          .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+          .openPopup();
+      });
     },
     function () {
       alert('could not get current location');
