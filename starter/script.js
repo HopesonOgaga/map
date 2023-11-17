@@ -11,6 +11,45 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
+class work_out {
+  date = new Date();
+  id = (Date.now() + '').slice(-10);
+  constructor(coords, Distance, Duration) {
+    this.coords = coords; // lat and log arr
+    this.Distance = Distance; // km
+    this.Duration = Duration; // in min
+  }
+}
+
+class running extends work_out {
+  constructor(coords, Distance, Duration, cadance) {
+    super(coords, Distance, Duration);
+    this.cadance = cadance;
+    this.cal_pace();
+  }
+  cal_pace() {
+    this.pace = this.Duration / this.Distance;
+    return this.pace;
+  }
+}
+class cycling extends work_out {
+  constructor(coords, Distance, Duration, cadance, elevation_gain) {
+    super(coords, Distance, Duration);
+    this.cadance = cadance;
+    this.elevation_gain = elevation_gain; //meter
+    this.calc_speep();
+  }
+  calc_speep() {
+    this.speed = this.Distance / (this.Duration / 60);
+    return this.speed;
+  }
+}
+
+const run_1 = new running([39, -12], 24, 178);
+const cyc_1 = new cycling([39, -12], 20, 128);
+console.log(run_1);
+console.log(cyc_1);
+
 let map, map_event;
 // gealocation api
 if (navigator.geolocation)
@@ -25,7 +64,6 @@ if (navigator.geolocation)
       );
       //  L.map('map') this refers to the id
       map = L.map('map').setView(coords, 13);
-
       L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
