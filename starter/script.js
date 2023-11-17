@@ -87,6 +87,48 @@ if (navigator.geolocation)
 
 form.addEventListener('submit', function (e) {
   e.preventDefault();
+  // addding data to form
+  const type = inputType.value;
+  const distance = +inputDistance.value;
+  const duration = +inputDuration.value;
+  const cadance = +inputCadence.value;
+  const elevation = +inputElevation.value;
+
+  // check data
+  if (type === 'running') {
+    if (!Number.isFinite(distance) || distance <= 0) {
+      alert('input has to be positive number');
+      return (inputDistance.value = '');
+    }
+    if (!Number.isFinite(duration) || duration <= 0) {
+      alert('input has to be positive number');
+      return (inputDuration.value = '');
+    }
+    if (!Number.isFinite(cadance) || cadance <= 0) {
+      alert('input has to be positive number');
+      return (inputCadence.value = '');
+    }
+  }
+
+  if (type === 'cycling') {
+    if (!Number.isFinite(elevation) || elevation <= 0) {
+      alert('input has to be positive number');
+      return (inputElevation.value = '');
+    }
+    if (!Number.isFinite(distance) || distance <= 0) {
+      alert('input has to be positive number');
+      return (inputDistance.value = '');
+    }
+    if (!Number.isFinite(duration) || duration <= 0) {
+      alert('input has to be positive number');
+      return (inputDuration.value = '');
+    }
+    if (!Number.isFinite(cadance) || cadance <= 0) {
+      alert('input has to be positive number');
+      return (inputCadence.value = '');
+    }
+  }
+
   // clear input fields
   inputDistance.value =
     inputDuration.value =
