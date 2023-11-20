@@ -33,13 +33,13 @@ class running extends work_out {
   }
 }
 class cycling extends work_out {
-  constructor(coords, Distance, Duration, cadance, elevation_gain) {
+  constructor(coords, Distance, Duration, cadance, elevation) {
     super(coords, Distance, Duration);
     this.cadance = cadance;
-    this.elevation_gain = elevation_gain; //meter
-    this.calc_speep();
+    this.elevation = elevation; //meter
+    this.calc_speed();
   }
-  calc_speep() {
+  calc_speed() {
     this.speed = this.Distance / (this.Duration / 60);
     return this.speed;
   }
@@ -82,11 +82,14 @@ if (navigator.geolocation)
     }
   );
 
-// .running-popup
-// .cycling-popup
-
 form.addEventListener('submit', function (e) {
   e.preventDefault();
+  // lat and log
+  const { lat } = map_event.latlng;
+  const { lng } = map_event.latlng;
+  const coords = [lat, lng];
+  let work_out = [];
+  console.log(work_out)
   // addding data to form
   const type = inputType.value;
   const distance = +inputDistance.value;
@@ -108,10 +111,13 @@ form.addEventListener('submit', function (e) {
       alert('input has to be positive number');
       return (inputCadence.value = '');
     }
-  }
 
+    work_out.push(new running([lat, lng], distance, duration, cadance));
+  
+  }
+  // check data
   if (type === 'cycling') {
-    if (!Number.isFinite(elevation) || elevation <= 0) {
+    if (!Number.isFinite(elevation)) {
       alert('input has to be positive number');
       return (inputElevation.value = '');
     }
@@ -123,10 +129,8 @@ form.addEventListener('submit', function (e) {
       alert('input has to be positive number');
       return (inputDuration.value = '');
     }
-    if (!Number.isFinite(cadance) || cadance <= 0) {
-      alert('input has to be positive number');
-      return (inputCadence.value = '');
-    }
+    
+    work_out.push(new cycling([lat, lng], distance, duration,elevation ));
   }
 
   // clear input fields
@@ -136,9 +140,7 @@ form.addEventListener('submit', function (e) {
     inputElevation.value =
       '';
   //display marker
-  const { lat } = map_event.latlng;
-  const { lng } = map_event.latlng;
-  const coords = [lat, lng];
+
   console.log(lat, lng);
   L.marker(coords)
     .addTo(map)
@@ -148,7 +150,7 @@ form.addEventListener('submit', function (e) {
         minWidth: 100,
         autoClose: false,
         closeOnClick: false,
-        className: 'running-popup',
+        className: `${type}-popup`,
       })
     )
     .setPopupContent('workout')
