@@ -19,6 +19,24 @@ class WorkOut {
     this.distance = distance; // km
     this.duration = duration; // in min
   }
+  get_local_storage() {
+    // user data local storage
+
+    // get data from event handlers
+    let data = JSON.parse(localStorage.getItem('WorkOut'));
+    console.log(data);
+    //attach event handlers
+
+    // check local storage for data
+    if (localStorage.getItem('WorkOut')) {
+      data = JSON.parse(localStorage.getItem('WorkOut'));
+    }
+    //loop through each workout 
+    data.forEach(element => {
+       console.log(element)
+    });
+    
+  }
 }
 
 class Running extends WorkOut {
@@ -26,6 +44,7 @@ class Running extends WorkOut {
     super(coords, distance, duration);
     this.cadence = cadence;
     this.calcPace();
+    this.get_local_storage();
   }
   calcPace() {
     this.pace = this.duration / this.distance;
@@ -39,14 +58,15 @@ class Cycling extends WorkOut {
     this.cadence = cadence;
     this.elevation = elevation; // meter
     this.calcSpeed();
+    this.get_local_storage();
   }
   calcSpeed() {
     this.speed = this.distance / (this.duration / 60);
     return this.speed;
   }
 }
-
-const workouts = []; // array to store workouts
+// array to store workouts
+const workouts = [];
 
 const run_1 = new Running([39, -12], 24, 178);
 const cyc_1 = new Cycling([39, -12], 20, 128);
@@ -83,6 +103,7 @@ if (navigator.geolocation)
 
 form.addEventListener('submit', function (e) {
   e.preventDefault();
+
   // lat and log
   const { lat } = map_event.latlng;
   const { lng } = map_event.latlng;
@@ -157,7 +178,11 @@ form.addEventListener('submit', function (e) {
         className: `${type}-popup`,
       })
     )
-    .setPopupContent(`${type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${type} on ${months[month]} ${monthDay.getDate()} `)
+    .setPopupContent(
+      `${type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${type} on ${
+        months[month]
+      } ${monthDay.getDate()} `
+    )
     .openPopup();
 
   let html = `  
@@ -218,11 +243,21 @@ form.addEventListener('submit', function (e) {
       </div>
     </li>`;
   }
+  containerWorkouts.addEventListener('click', function (e) {
+    const work_el = e.target.closest('.workout');
+    console.log(work_el);
+    if (work_el) return;
+  });
 
   containerWorkouts.insertAdjacentHTML('beforeend', html);
   form.classList.add('hidden');
+
+  //local storage
+  localStorage.setItem('WorkOut', JSON.stringify(workouts));
 });
 
 inputType.addEventListener('change', function () {
   inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
 });
+
+//data-id
