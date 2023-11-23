@@ -128,11 +128,17 @@ form.addEventListener('submit', function (e) {
       return (inputDuration.value = '');
     }
 
-    workouts.push(new Cycling([lat, lng], distance, duration, cadence, elevation));
+    workouts.push(
+      new Cycling([lat, lng], distance, duration, cadence, elevation)
+    );
   }
 
   // clear input fields
-  inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = '';
+  inputDistance.value =
+    inputDuration.value =
+    inputCadence.value =
+    inputElevation.value =
+      '';
 
   // display marker
   console.log(lat, lng);
@@ -151,20 +157,28 @@ form.addEventListener('submit', function (e) {
         className: `${type}-popup`,
       })
     )
-    .setPopupContent(` ${type} on ${months[month]} ${monthDay.getDate()} `)
+    .setPopupContent(`${type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${type} on ${months[month]} ${monthDay.getDate()} `)
     .openPopup();
 
   let html = `  
-   <li class="workout workout--${type}" data-id="${workouts[workouts.length - 1].id}">
-    <h2 class="workout__title">${type} on ${months[month]} ${monthDay.getDate()}</h2>
+   <li class="workout workout--${type}" data-id="${
+    workouts[workouts.length - 1].id
+  }">
+    <h2 class="workout__title">${type} on ${
+    months[month]
+  } ${monthDay.getDate()}</h2>
     <div class="workout__details">
       <span class="workout__icon"> ${type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} </span>
-      <span class="workout__value"> ${workouts[workouts.length - 1].distance} </span>
+      <span class="workout__value"> ${
+        workouts[workouts.length - 1].distance
+      } </span>
       <span class="workout__unit">km</span>
     </div>
     <div class="workout__details">
       <span class="workout__icon">⏱</span>
-      <span class="workout__value">${workouts[workouts.length - 1].duration}</span>
+      <span class="workout__value">${
+        workouts[workouts.length - 1].duration
+      }</span>
       <span class="workout__unit">min</span>
     </div>`;
 
@@ -172,12 +186,16 @@ form.addEventListener('submit', function (e) {
     html += `  
       <div class="workout__details">
         <span class="workout__icon">⚡️</span>
-        <span class="workout__value">${workouts[workouts.length - 1].pace}</span>
+        <span class="workout__value">${
+          workouts[workouts.length - 1].pace
+        }</span>
         <span class="workout__unit">min/km</span>
       </div>
       <div class="workout__details">
         <span class="workout__icon">🦶🏼</span>
-        <span class="workout__value">${workouts[workouts.length - 1].cadence}</span>
+        <span class="workout__value">${
+          workouts[workouts.length - 1].cadence
+        }</span>
         <span class="workout__unit">spm</span>
       </div>`;
   }
@@ -186,18 +204,23 @@ form.addEventListener('submit', function (e) {
     html += `  
       <div class="workout__details">
         <span class="workout__icon">⚡️</span>
-        <span class="workout__value">${workouts[workouts.length - 1].speed}</span>
+        <span class="workout__value">${
+          workouts[workouts.length - 1].speed
+        }</span>
         <span class="workout__unit">km/h</span>
       </div>
       <div class="workout__details">
         <span class="workout__icon">⛰</span>
-        <span class="workout__value">${workouts[workouts.length - 1].elevation}</span>
+        <span class="workout__value">${
+          workouts[workouts.length - 1].elevation
+        }</span>
         <span class="workout__unit">m</span>
       </div>
     </li>`;
   }
 
   containerWorkouts.insertAdjacentHTML('beforeend', html);
+  form.classList.add('hidden');
 });
 
 inputType.addEventListener('change', function () {
